@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #273FB7;
+  --color-secondary: #A8AEB6;
+  --color-surface: #000000;
+  --color-surface-elevated: #111111;
+  --color-on-surface: #FFFFFF;
+  
+  --font-syne: "Syne", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+
+  --spacing-lg: 100px;
+  --spacing-xl: 198px;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-poppins antialiased selection:bg-primary/30;
+  }
+}
+
+@layer utilities {
+  .glow-blue {
+    box-shadow: 0 0 40px -10px rgba(39, 63, 183, 0.5);
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  .bg-glow-gradient {
+    background: radial-gradient(circle at center, rgba(39, 63, 183, 0.15) 0%, transparent 70%);
+  }
+}
