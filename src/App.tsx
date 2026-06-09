@@ -545,6 +545,10 @@ export default function App() {
                     <a href="mailto:sukunstudioofficial@gmail.com" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-4">sukunstudioofficial@gmail.com</a>
                   </div>
                   <div className="flex items-center gap-3 text-white/90">
+                    <span className="font-syne font-bold">Location:</span>
+                    <a href="https://maps.app.goo.gl/Eb2ufnC7PZnr694N8" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-4">House 1217, Road 10 Avenue 10, Dhaka 1216</a>
+                  </div>
+                  <div className="flex items-center gap-3 text-white/90">
                     <span className="font-syne font-bold">WhatsApp:</span>
                     <a href="https://wa.me/8801706575704" target="_blank" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-4">+880 1706-575704</a>
                   </div>
