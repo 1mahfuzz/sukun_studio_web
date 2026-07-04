@@ -118,7 +118,7 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img 
-            src="https://scontent.fdac3-2.fna.fbcdn.net/v/t39.30808-6/622325709_122153496146928085_411299625906029775_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=xS-sYPOg7qIQ7kNvwFrVfEp&_nc_oc=AdrhHjjKUoSAizwW_cfryaXsMND8SYcdhJrGAR2iY4ey5KSpwfCwxncZfqU3eWsirEE&_nc_zt=23&_nc_ht=scontent.fdac3-2.fna&_nc_gid=-O-BbbJADy7O3xplUcmXlA&_nc_ss=7b289&oh=00_Af7KD89tY5865bMKMaeGClwNXTUqseIOunm1hE_F18_hxQ&oe=6A03BB11" 
+            src="sukun_logo.png" 
             alt="Sukun Studio Logo" 
             className="h-10 w-auto rounded-md"
           />
