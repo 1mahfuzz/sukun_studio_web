@@ -610,8 +610,8 @@ function ContactCTA() {
           </div>
           <div>
             <span>Location:</span>
-            <a href="https://maps.app.goo.gl/Eb2ufnC7PZnr694N8">
-              House 1217, Road 10 Avenue 10, Dhaka 1216
+            <a href="https://maps.app.goo.gl/RExm6PvptiXgdbWq9">
+              House 771, Road 10 Avenue 6, Dhaka 1216
             </a>
           </div>
           <div>
