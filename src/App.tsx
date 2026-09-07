@@ -3,184 +3,278 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useMemo } from 'react';
-import { 
-  Video, 
-  Settings, 
-  Mic, 
-  Zap, 
-  Palette, 
-  Camera, 
-  ArrowRight, 
-  CheckCircle2, 
-  Menu, 
-  X,
-  Play,
-  PlayCircle,
+import {type ReactNode, useState} from 'react';
+import {
+  ArrowRight,
+  Camera,
+  CheckCircle2,
+  ChevronRight,
   ExternalLink,
-  ChevronRight
+  Menu,
+  Mic,
+  Palette,
+  PlayCircle,
+  Settings,
+  Video,
+  X,
+  Zap,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import {AnimatePresence, motion} from 'motion/react';
 import sukunLogo from './sukun_logo.png';
-// --- Data Definitions ---
 
 const SERVICE_SUITES = [
   {
     id: 'video-production',
     title: 'Video Production & Shooting',
     subtitle: 'From the first script to the final frame.',
-    icon: <Video className="w-6 h-6" />,
+    icon: <Video className="h-5 w-5" />,
     categories: [
-      { name: 'Production Types', items: ['Product Promos', 'SaaS Explainers', 'Commercial Advertisements', 'Corporate Videos', 'Brand Storytelling', 'Tutorials & Walkthroughs', 'Social Media Campaigns', 'YouTube Content Production'] },
-      { name: 'Cinematography', items: ['Indoor & Outdoor Shoots', 'Corporate Interviews', 'Office & Workspace Shoots', 'Event Coverage', 'Podcast Filming', 'Product Cinematography', 'Reel & Short-form', 'Multi-camera Setups'] }
-    ]
+      {
+        name: 'Production Types',
+        items: [
+          'Product Promos',
+          'SaaS Explainers',
+          'Commercial Advertisements',
+          'Corporate Videos',
+          'Brand Storytelling',
+          'Tutorials & Walkthroughs',
+          'Social Media Campaigns',
+          'YouTube Content Production',
+        ],
+      },
+      {
+        name: 'Cinematography',
+        items: [
+          'Indoor & Outdoor Shoots',
+          'Corporate Interviews',
+          'Office & Workspace Shoots',
+          'Event Coverage',
+          'Podcast Filming',
+          'Product Cinematography',
+          'Reel & Short-form',
+          'Multi-camera Setups',
+        ],
+      },
+    ],
   },
   {
     id: 'video-editing',
     title: 'Video Editing & Post-Production',
     subtitle: 'Polishing your footage for maximum audience retention.',
-    icon: <Settings className="w-6 h-6" />,
+    icon: <Settings className="h-5 w-5" />,
     categories: [
-      { name: 'Editing Services', items: ['Professional Editing', 'Cinematic Cuts & Transitions', 'Color Correction & Grading', 'Sound Design & Audio Cleanup', 'Subtitle & Caption Creation', 'Social Media Optimization', 'YouTube Editing', 'Short-form Content'] }
-    ]
+      {
+        name: 'Editing Services',
+        items: [
+          'Professional Editing',
+          'Cinematic Cuts & Transitions',
+          'Color Correction & Grading',
+          'Sound Design & Audio Cleanup',
+          'Subtitle & Caption Creation',
+          'Social Media Optimization',
+          'YouTube Editing',
+          'Short-form Content',
+        ],
+      },
+    ],
   },
   {
     id: 'podcast',
     title: 'Podcast Production',
     subtitle: 'High-fidelity audio and video for modern voices.',
-    icon: <Mic className="w-6 h-6" />,
+    icon: <Mic className="h-5 w-5" />,
     categories: [
-      { name: 'Podcast Services', items: ['Recording Setup', 'Multi-camera Production', 'Audio Enhancement', 'Podcast Editing', 'Intro & Outro Creation', 'Short Clips for Social', 'Studio-style Visuals'] }
-    ]
+      {
+        name: 'Podcast Services',
+        items: [
+          'Recording Setup',
+          'Multi-camera Production',
+          'Audio Enhancement',
+          'Podcast Editing',
+          'Intro & Outro Creation',
+          'Short Clips for Social',
+          'Studio-style Visuals',
+        ],
+      },
+    ],
   },
   {
     id: 'motion-graphics',
     title: 'Motion Graphics & Animation',
     subtitle: 'Dynamic visuals that explain the complex.',
-    icon: <Zap className="w-6 h-6" />,
+    icon: <Zap className="h-5 w-5" />,
     categories: [
-      { name: 'Motion Services', items: ['Logo Animations', 'UI/UX Animations', 'Feature Animations', 'Explainer Animations', 'Kinetic Typography', 'Animated Infographics', 'Social Media Motion', 'Intro & Outro Animations'] }
-    ]
+      {
+        name: 'Motion Services',
+        items: [
+          'Logo Animations',
+          'UI/UX Animations',
+          'Feature Animations',
+          'Explainer Animations',
+          'Kinetic Typography',
+          'Animated Infographics',
+          'Social Media Motion',
+          'Intro & Outro Animations',
+        ],
+      },
+    ],
   },
   {
     id: 'graphic-design',
     title: 'Graphic Design',
     subtitle: 'Building a strong, professional brand identity.',
-    icon: <Palette className="w-6 h-6" />,
+    icon: <Palette className="h-5 w-5" />,
     categories: [
-      { name: 'Design Services', items: ['Social Media Creatives', 'Thumbnail Design', 'Brand Identity Design', 'Posters & Banners', 'UI Presentation Graphics', 'Marketing Materials', 'Corporate Design Assets'] }
-    ]
+      {
+        name: 'Design Services',
+        items: [
+          'Social Media Creatives',
+          'Thumbnail Design',
+          'Brand Identity Design',
+          'Posters & Banners',
+          'UI Presentation Graphics',
+          'Marketing Materials',
+          'Corporate Design Assets',
+        ],
+      },
+    ],
   },
   {
     id: 'photography',
     title: 'Professional Photography',
     subtitle: 'Clean and modern imagery for brands and teams.',
-    icon: <Camera className="w-6 h-6" />,
+    icon: <Camera className="h-5 w-5" />,
     categories: [
-      { name: 'Photography Services', items: ['Product Photography', 'Corporate Photography', 'Team & Office Photography', 'Event Photography', 'Branding Photoshoots', 'Social Media Photography', 'Creative Commercial'] }
-    ]
-  }
+      {
+        name: 'Photography Services',
+        items: [
+          'Product Photography',
+          'Corporate Photography',
+          'Team & Office Photography',
+          'Event Photography',
+          'Branding Photoshoots',
+          'Social Media Photography',
+          'Creative Commercial',
+        ],
+      },
+    ],
+  },
 ];
 
 const WORKFLOW = [
   {
     title: 'Concept Development',
     description: 'Scripting and storyboarding to align with your vision.',
-    step: '01'
+    step: '01',
   },
   {
     title: 'Cinematic Production',
     description: 'High-end cameras, professional lighting, and studio-grade audio.',
-    step: '02'
+    step: '02',
   },
   {
     title: 'Strategic Delivery',
     description: 'Pacing, visual consistency, and platform optimization.',
-    step: '03'
-  }
+    step: '03',
+  },
 ];
 
 const PORTFOLIO_VIDEOS = [
-  { id: 'mrg1vDYkOCI', title: 'Creative Showcase I' },
-  { id: 'mxRz32bP8GE', title: 'SaaS Motion Design' },
-  { id: 'mQDdETKXpzM', title: 'Studio Showreel' },
-  { id: 'DC7Ma6LpPeo', title: 'Digital Production' },
-  { id: '9-S_gKh9IbQ', title: 'Brand Storytelling' },
+  {id: 'mrg1vDYkOCI', title: 'Creative Showcase I'},
+  {id: 'mxRz32bP8GE', title: 'SaaS Motion Design'},
+  {id: 'mQDdETKXpzM', title: 'Studio Showreel'},
+  {id: 'DC7Ma6LpPeo', title: 'Digital Production'},
+  {id: '9-S_gKh9IbQ', title: 'Brand Storytelling'},
 ];
 
-// --- Components ---
+const NAV_LINKS = ['Services', 'Workflow', 'Portfolio', 'About'];
+
+function CalButton({
+  children,
+  className = '',
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <button
+      data-cal-link="sukun-studio/15min"
+      data-cal-namespace="15min"
+      data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+      className={className}
+    >
+      {children}
+    </button>
+  );
+}
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img 
-            src={sukunLogo} 
-            alt="Sukun Studio Logo" 
-            className="h-10 w-auto rounded-md"
+    <nav className="fixed left-0 right-0 top-0 z-50 px-4 pt-4">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between border border-white/10 bg-[#050514]/75 px-4 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl md:px-6">
+        <a href="#" className="flex min-w-0 items-center gap-3">
+          <img
+            src={sukunLogo}
+            alt="Sukun Studio Logo"
+            className="h-9 w-9 shrink-0 rounded-[8px] border border-white/10 object-cover"
           />
-          <span className="font-syne font-bold text-xl tracking-tight text-white">SUKUN STUDIO</span>
-        </div>
+          <span className="font-syne text-sm font-bold tracking-[0.22em] text-white sm:text-base">
+            SUKUN STUDIO
+          </span>
+        </a>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
-          {['Services', 'Workflow', 'Portfolio', 'About'].map((link) => (
-            <a 
-              key={link} 
+        <div className="hidden items-center gap-8 md:flex">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link}
               href={`#${link.toLowerCase()}`}
-              className="text-secondary font-poppins text-sm hover:text-white transition-colors"
+              className="text-xs font-medium text-secondary transition-colors hover:text-white"
             >
               {link}
             </a>
           ))}
-          <button 
-            data-cal-link="sukun-studio/15min"
-            data-cal-namespace="15min"
-            data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
-            className="bg-primary hover:bg-[#3550D3] text-white px-6 py-2 rounded-lg font-poppins text-sm font-medium transition-all duration-300 transform hover:scale-105"
-          >
-            Book a Consultation
-          </button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-on-surface">
-          {isOpen ? <X /> : <Menu />}
+        <div className="hidden md:block">
+          <CalButton className="button-primary h-10 px-5 text-xs">
+            Book a Consultation
+          </CalButton>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Toggle navigation"
+          onClick={() => setIsOpen((value) => !value)}
+          className="grid h-10 w-10 place-items-center border border-white/10 text-white md:hidden"
+        >
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-20 left-0 right-0 bg-surface-elevated border-b border-white/5 md:hidden p-6"
+          <motion.div
+            initial={{opacity: 0, y: -8}}
+            animate={{opacity: 1, y: 0}}
+            exit={{opacity: 0, y: -8}}
+            className="mx-auto mt-2 max-w-7xl border border-white/10 bg-[#060616]/95 p-4 backdrop-blur-2xl md:hidden"
           >
-            <div className="flex flex-col gap-4">
-              {['Services', 'Workflow', 'Portfolio', 'About'].map((link) => (
-                <a 
-                  key={link} 
+            <div className="grid gap-2">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link}
                   href={`#${link.toLowerCase()}`}
                   onClick={() => setIsOpen(false)}
-                  className="text-secondary text-lg hover:text-white"
+                  className="px-3 py-3 text-sm font-medium text-secondary hover:text-white"
                 >
                   {link}
                 </a>
               ))}
-              <hr className="border-white/5 my-2" />
-              <button 
-                data-cal-link="sukun-studio/15min"
-                data-cal-namespace="15min"
-                data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
-                className="bg-primary hover:bg-[#3550D3] text-white w-full py-4 rounded-lg font-poppins text-sm font-medium"
-              >
+              <CalButton className="button-primary mt-2 h-12 text-sm">
                 Book a Consultation
-              </button>
+              </CalButton>
             </div>
           </motion.div>
         )}
@@ -189,119 +283,140 @@ function Navbar() {
   );
 }
 
-function Hero() {
-  const scrollToServices = () => {
-    document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+function SectionTitle({
+  eyebrow,
+  title,
+  copy,
+  centered = false,
+}: {
+  eyebrow: string;
+  title: string;
+  copy?: string;
+  centered?: boolean;
+}) {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-spacing-xl overflow-hidden bg-glow-gradient">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none" />
-      
-      <div className="max-w-4xl mx-auto px-6 text-center z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary font-poppins text-xs font-semibold tracking-wider uppercase mb-6">
-            Production • Post • Animation
-          </span>
-          <h1 className="font-syne text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-8 text-glow">
-            Cinematic Content for <span className="text-primary italic">Tech, SaaS,</span> and Digital Creators.
-          </h1>
-          <p className="text-secondary font-poppins text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Sukun Studio is a full-service creative production studio transforming ideas into professional visual experiences.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <button 
-              onClick={scrollToServices}
-              className="bg-primary hover:bg-[#3550D3] text-white px-10 py-4 rounded-lg font-poppins text-base font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2 group"
-            >
-              Explore Our Services
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button 
-              data-cal-link="sukun-studio/15min"
-              data-cal-namespace="15min"
-              data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
-              className="bg-transparent hover:bg-white/5 border border-white/10 text-secondary hover:text-white px-10 py-4 rounded-lg font-poppins text-base font-semibold transition-all duration-300"
-            >
-              Book a Consultation
-            </button>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Decorative Elements */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8, duration: 1 }}
-        className="mt-20 w-full max-w-5xl px-6 relative"
-      >
-        <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 glow-blue group relative">
-          <iframe 
-            width="100%" 
-            height="100%" 
-            src="https://www.youtube.com/embed/vwrsKY1SQaY?autoplay=0&rel=0" 
-            title="Sukun Studio Showreel" 
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowFullScreen
-            className="w-full h-full"
-          ></iframe>
-          <div className="absolute bottom-6 left-6 flex items-center gap-3 pointer-events-none">
-             <div className="px-3 py-1 bg-black/60 backdrop-blur-sm rounded text-[10px] font-bold tracking-widest uppercase border border-white/10">Official Showreel</div>
-          </div>
-        </div>
-      </motion.div>
-    </section>
+    <div className={`section-title ${centered ? 'mx-auto text-center' : ''}`}>
+      <span className="eyebrow">{eyebrow}</span>
+      <h2>{title}</h2>
+      {copy && <p>{copy}</p>}
+    </div>
   );
 }
 
-function SectionTitle({ subtitle, title, centered = true }: { subtitle: string, title: string, centered?: boolean }) {
+function Hero() {
+  const scrollToServices = () => {
+    document.getElementById('services')?.scrollIntoView({behavior: 'smooth'});
+  };
+
   return (
-    <div className={`mb-16 ${centered ? 'text-center' : ''}`}>
-      <span className="text-primary font-poppins text-xs font-bold tracking-[0.2em] uppercase block mb-4 mt-5 pt-[30px]">
-        {subtitle}
-      </span>
-      <h2 className="font-syne text-4xl md:text-5xl font-bold leading-tight">
-        {title}
-      </h2>
-    </div>
+    <section className="hero-grid relative overflow-hidden px-4 pb-20 pt-28 md:pb-28 md:pt-32">
+      <div className="spotlight spotlight-left" />
+      <div className="spotlight spotlight-right" />
+      <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+        <motion.div
+          initial={{opacity: 0, y: 24}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.7}}
+          className="relative z-10"
+        >
+          <span className="eyebrow">Production • Post • Animation</span>
+          <h1 className="mt-5 max-w-4xl font-syne text-[clamp(2.85rem,6vw,5.7rem)] font-bold leading-[0.95] text-white">
+            Cinematic Content for{' '}
+            <span className="text-violet-200">Tech, SaaS,</span> and Digital
+            Creators.
+          </h1>
+          <p className="mt-7 max-w-2xl text-base leading-8 text-secondary md:text-lg">
+            Sukun Studio is a full-service creative production studio
+            transforming ideas into professional visual experiences.
+          </p>
+
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <button onClick={scrollToServices} className="button-primary h-[52px] px-7">
+              Explore Our Services
+              <ArrowRight className="h-4 w-4" />
+            </button>
+            <CalButton className="button-secondary h-[52px] px-7">
+              Book a Consultation
+            </CalButton>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{opacity: 0, scale: 0.94}}
+          animate={{opacity: 1, scale: 1}}
+          transition={{delay: 0.15, duration: 0.8}}
+          className="hero-media"
+        >
+          <div className="hero-media-header">
+            <span>Official Showreel</span>
+            <PlayCircle className="h-4 w-4 text-violet-200" />
+          </div>
+          <div className="hero-video-frame">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/vwrsKY1SQaY?autoplay=0&rel=0"
+              title="Sukun Studio Showreel"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          </div>
+          <div className="hero-stat-panel">
+            <span>100+</span>
+            <p>Projects successfully delivered for global tech brands.</p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
 function Services() {
   return (
-    <section id="services" className="py-spacing-xl bg-surface">
-      <div className="max-w-7xl mx-auto px-6 pb-[50px]">
-        <SectionTitle subtitle="Our Capabilities" title="Comprehensive Service Suites" />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section id="services" className="section-band px-4 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl">
+        <SectionTitle
+          eyebrow="Our Capabilities"
+          title="Comprehensive Service Suites"
+          centered
+        />
+
+        <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {SERVICE_SUITES.map((suite, idx) => (
-            <motion.div
+            <motion.article
               key={suite.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-surface-elevated border border-white/5 p-8 rounded-xl hover:border-primary/30 transition-all duration-300 group"
+              initial={{opacity: 0, y: 22}}
+              whileInView={{opacity: 1, y: 0}}
+              transition={{delay: idx * 0.06}}
+              viewport={{once: true, margin: '-80px'}}
+              className="feature-card group"
             >
-              <div className="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
-                {suite.icon}
+              <div className="flex items-start justify-between gap-6">
+                <div>
+                  <div className="icon-tile">{suite.icon}</div>
+                  <h3 className="mt-6 font-syne text-2xl font-bold text-white">
+                    {suite.title}
+                  </h3>
+                </div>
+                <span className="text-xs font-bold text-white/20">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
               </div>
-              <h3 className="font-syne text-2xl font-bold mb-3">{suite.title}</h3>
-              <p className="text-secondary text-sm mb-8 leading-relaxed italic">{suite.subtitle}</p>
-              
-              <div className="space-y-6">
-                {suite.categories.map((cat, cIdx) => (
-                  <div key={cIdx}>
-                    <p className="text-xs font-bold text-primary tracking-widest uppercase mb-3">{cat.name}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {cat.items.map((item, iIdx) => (
-                        <span key={iIdx} className="px-3 py-1 bg-black/40 border border-white/5 rounded-full text-[11px] text-secondary hover:text-white hover:border-white/20 transition-colors">
+              <p className="mt-4 text-sm leading-7 text-secondary">
+                {suite.subtitle}
+              </p>
+
+              <div className="mt-8 space-y-6">
+                {suite.categories.map((cat) => (
+                  <div key={cat.name}>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-violet-200">
+                      {cat.name}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {cat.items.map((item) => (
+                        <span key={item} className="service-pill">
                           {item}
                         </span>
                       ))}
@@ -309,7 +424,7 @@ function Services() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>
@@ -319,54 +434,55 @@ function Services() {
 
 function WhySukun() {
   return (
-    <section className="py-spacing-xl bg-surface-elevated relative overflow-hidden">
-      <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-primary/5 blur-[100px] pointer-events-none" />
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center mt-[50px] pb-[30px]">
+    <section id="about" className="section-band section-band-deep px-4 py-24 md:py-32">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
+          initial={{opacity: 0, x: -24}}
+          whileInView={{opacity: 1, x: 0}}
+          viewport={{once: true, margin: '-80px'}}
         >
-          <SectionTitle subtitle="Our Mission" title="Helping brands communicate their vision" centered={false} />
-          <blockquote className="text-2xl font-syne font-medium italic text-on-surface/90 border-l-4 border-primary pl-8 mb-10 leading-relaxed">
-            "We focus on content that builds trust, engagement, and long-term brand value."
+          <SectionTitle
+            eyebrow="Our Mission"
+            title="Helping brands communicate their vision"
+          />
+          <blockquote className="mt-8 border-l border-violet-300/70 pl-6 font-syne text-2xl font-semibold leading-snug text-white md:text-3xl">
+            "We focus on content that builds trust, engagement, and long-term
+            brand value."
           </blockquote>
-          <p className="text-secondary text-lg leading-relaxed mb-8">
-            At Sukun Studio, we believe that every digital product and tech service deserves to be presented as a masterpiece. Our focus is on the intersection of technology and artistry.
+          <p className="mt-8 max-w-2xl text-base leading-8 text-secondary md:text-lg">
+            At Sukun Studio, we believe that every digital product and tech
+            service deserves to be presented as a masterpiece. Our focus is on
+            the intersection of technology and artistry.
           </p>
-          <div className="space-y-4">
-             {[
-               'Result-driven storytelling',
-               'Studio-grade production quality',
-               'Global creative standard',
-               'Expert handling of tech-focused content'
-             ].map((item) => (
-               <div key={item} className="flex items-center gap-3">
-                 <CheckCircle2 className="text-primary w-5 h-5 flex-shrink-0" />
-                 <span className="text-on-surface/80">{item}</span>
-               </div>
-             ))}
+          <div className="mt-9 grid gap-3 sm:grid-cols-2">
+            {[
+              'Result-driven storytelling',
+              'Studio-grade production quality',
+              'Global creative standard',
+              'Expert handling of tech-focused content',
+            ].map((item) => (
+              <div key={item} className="check-row">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-violet-200" />
+                <span>{item}</span>
+              </div>
+            ))}
           </div>
         </motion.div>
-        
+
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="relative"
+          initial={{opacity: 0, scale: 0.95}}
+          whileInView={{opacity: 1, scale: 1}}
+          viewport={{once: true, margin: '-80px'}}
+          className="studio-panel"
         >
-          <div className="aspect-square bg-gradient-to-tr from-primary/20 to-transparent rounded-2xl p-px">
-            <div className="w-full h-full bg-[#0a0a0a] rounded-2xl flex items-center justify-center overflow-hidden">
-               <img 
-                 src="https://lh3.googleusercontent.com/p/AF1QipOUg3yZ-5Dk69_YXfgHO5nWnoko4Nk0tYM65rul=s680-w680-h510-rw" 
-                 alt="Sukun Studio Professional Setup" 
-                 className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-700"
-               />
-            </div>
-          </div>
-          <div className="absolute -bottom-8 -left-8 bg-surface border border-white/10 p-6 rounded-xl glow-blue max-w-[240px]">
-            <p className="font-syne text-3xl font-bold mb-1">100+</p>
-            <p className="text-secondary text-sm">Projects successfully delivered for global tech brands.</p>
+          <img
+            src="https://lh3.googleusercontent.com/p/AF1QipOUg3yZ-5Dk69_YXfgHO5nWnoko4Nk0tYM65rul=s680-w680-h510-rw"
+            alt="Sukun Studio Professional Setup"
+            className="h-full min-h-[360px] w-full object-cover"
+          />
+          <div className="studio-panel-caption">
+            <span>100+</span>
+            <p>Projects successfully delivered for global tech brands.</p>
           </div>
         </motion.div>
       </div>
@@ -376,28 +492,28 @@ function WhySukun() {
 
 function Workflow() {
   return (
-    <section id="workflow" className="py-spacing-xl bg-surface">
-      <div className="max-w-7xl mx-auto px-6 text-center py-[50px] mt-[50px]">
-        <SectionTitle subtitle="Our Process" title="The Sukun Workflow" />
-        
-        <div className="grid md:grid-cols-3 gap-12 relative">
-          <div className="hidden lg:block absolute top-[60px] left-[20%] right-[20%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-          
+    <section id="workflow" className="section-band px-4 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl">
+        <SectionTitle
+          eyebrow="Our Process"
+          title="The Sukun Workflow"
+          centered
+        />
+
+        <div className="workflow-rail mt-16 grid gap-4 md:grid-cols-3">
           {WORKFLOW.map((item, idx) => (
-            <motion.div
+            <motion.article
               key={item.step}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.2 }}
-              viewport={{ once: true }}
-              className="relative"
+              initial={{opacity: 0, y: 20}}
+              whileInView={{opacity: 1, y: 0}}
+              transition={{delay: idx * 0.12}}
+              viewport={{once: true, margin: '-80px'}}
+              className="workflow-card"
             >
-              <div className="w-16 h-16 bg-surface-elevated border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 relative z-10 group-hover:border-primary transition-colors">
-                <span className="font-syne text-xl font-bold text-primary">{item.step}</span>
-              </div>
-              <h3 className="font-syne text-2xl font-bold mb-4">{item.title}</h3>
-              <p className="text-secondary leading-relaxed">{item.description}</p>
-            </motion.div>
+              <span>{item.step}</span>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </motion.article>
           ))}
         </div>
       </div>
@@ -407,109 +523,205 @@ function Workflow() {
 
 function Portfolio() {
   return (
-    <section id="portfolio" className="py-spacing-xl bg-surface-elevated">
-      <div className="max-w-7xl mx-auto px-6 py-[50px] mt-[50px]">
-        <SectionTitle subtitle="Showcase" title="Portfolio & Showreel" />
-        
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+    <section id="portfolio" className="section-band section-band-deep px-4 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <SectionTitle
+            eyebrow="Showcase"
+            title="Portfolio & Showreel"
+          />
+          <a
+            href="https://www.youtube.com/@SukunStudioBD"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button-secondary h-12 w-fit px-5 text-sm"
+          >
+            View Full Archive on YouTube
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2">
           {PORTFOLIO_VIDEOS.map((video, idx) => (
-            <motion.div
+            <motion.article
               key={video.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className={`group flex flex-col ${idx === 4 ? 'md:col-span-2 max-w-3xl mx-auto w-full' : ''}`}
+              initial={{opacity: 0, y: 22}}
+              whileInView={{opacity: 1, y: 0}}
+              transition={{delay: idx * 0.07}}
+              viewport={{once: true, margin: '-80px'}}
+              className="portfolio-card"
             >
-              <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 glow-blue bg-black relative">
-                <iframe 
-                  width="100%" 
-                  height="100%" 
-                  src={`https://www.youtube.com/embed/${video.id}?rel=0`} 
-                  title={video.title} 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              <div className="portfolio-video">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${video.id}?rel=0`}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
-                  className="w-full h-full"
-                ></iframe>
+                  className="h-full w-full"
+                />
               </div>
-              <div className="mt-6 flex justify-between items-center">
-                <h4 className="font-syne text-xl font-bold">{video.title}</h4>
-                <a 
-                  href={`https://youtu.be/${video.id}`} 
-                  target="_blank" 
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <h3 className="font-syne text-xl font-bold text-white">
+                  {video.title}
+                </h3>
+                <a
+                  href={`https://youtu.be/${video.id}`}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary hover:text-white transition-colors"
+                  aria-label={`Open ${video.title} on YouTube`}
+                  className="grid h-10 w-10 shrink-0 place-items-center border border-white/10 text-violet-200 transition-colors hover:border-violet-200 hover:text-white"
                 >
-                  <ExternalLink className="w-5 h-5" />
+                  <ExternalLink className="h-4 w-4" />
                 </a>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
-        </div>
-        
-        <div className="mt-20 text-center">
-            <a 
-              href="https://www.youtube.com/@SukunStudioBD" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-block bg-transparent border border-white/10 hover:border-white/30 text-white px-10 py-4 rounded-lg font-poppins font-semibold transition-all duration-300"
-            >
-               View Full Archive on YouTube
-            </a>
         </div>
       </div>
     </section>
   );
 }
 
-function Footer() {
+function ContactCTA() {
   return (
-    <footer className="bg-surface pt-spacing-xl border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 mt-[50px]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 pb-20 border-b border-white/5">
+    <section className="relative overflow-hidden px-4 py-24 md:py-32">
+      <div className="contact-glow" />
+      <motion.div
+        initial={{opacity: 0, y: 20}}
+        whileInView={{opacity: 1, y: 0}}
+        viewport={{once: true, margin: '-80px'}}
+        className="contact-panel mx-auto max-w-6xl"
+      >
+        <div>
+          <h2 className="max-w-3xl font-syne text-4xl font-bold leading-tight text-white md:text-6xl">
+            Let's create something extraordinary together.
+          </h2>
+        </div>
+
+        <div className="contact-details">
           <div>
-            <h2 className="font-syne text-4xl md:text-5xl font-bold leading-tight mb-8">
-              Ready to transform your brand’s visuals?
-            </h2>
-            <div className="flex flex-wrap gap-4 underline underline-offset-8 decoration-primary/50">
-               <a href="mailto:sukunstudioofficial@gmail.com" className="font-syne text-2xl font-bold hover:text-primary transition-colors">sukunstudioofficial@gmail.com</a>
-            </div>
-            <div className="flex gap-6 mt-12">
-               {['Instagram', 'Twitter', 'LinkedIn', 'Behance'].map(social => (
-                 <a key={social} href="#" className="text-secondary text-sm hover:text-white transition-colors">{social}</a>
-               ))}
-            </div>
+            <span>Email:</span>
+            <a href="mailto:sukunstudioofficial@gmail.com">
+              sukunstudioofficial@gmail.com
+            </a>
           </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-            <div>
-              <p className="font-bold text-xs tracking-widest uppercase mb-6 text-primary">Explore</p>
-              <ul className="space-y-4 text-sm text-secondary">
-                <li><a href="#" className="hover:text-white">All Services</a></li>
-                <li><a href="#" className="hover:text-white">Portfolio</a></li>
-                <li><a href="#" className="hover:text-white">Process</a></li>
-                <li><a href="#" className="hover:text-white">Clients</a></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-bold text-xs tracking-widest uppercase mb-6 text-primary">Studio</p>
-              <ul className="space-y-4 text-sm text-secondary">
-                <li><a href="#" className="hover:text-white">About Us</a></li>
-                <li><a href="#" className="hover:text-white">Careers</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
-              </ul>
-            </div>
+          <div>
+            <span>Location:</span>
+            <a href="https://maps.app.goo.gl/RExm6PvptiXgdbWq9">
+              House 771, Road 10 Avenue 6, Dhaka 1216
+            </a>
+          </div>
+          <div>
+            <span>WhatsApp:</span>
+            <a href="https://wa.me/8801706575704" target="_blank" rel="noopener noreferrer">
+              +880 1706-575704
+            </a>
           </div>
         </div>
-        
-        <div className="py-10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-secondary opacity-50">
-          <p>© 2024 Sukun Studio. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a href="mailto:hello@sukunstudio.com" className="button-light h-[52px] px-7">
+            Send Email
+            <ChevronRight className="h-5 w-5" />
+          </a>
+          <a
+            href="https://wa.me/8801705527357"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button-secondary h-[52px] px-7"
+          >
+            WhatsApp Us
+          </a>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-white/10 bg-[#02020a] px-4 py-12">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div>
+          <div className="flex items-center gap-3">
+            <img
+              src={sukunLogo}
+              alt="Sukun Studio Logo"
+              className="h-9 w-9 rounded-[8px] border border-white/10 object-cover"
+            />
+            <span className="font-syne text-sm font-bold tracking-[0.22em] text-white">
+              SUKUN STUDIO
+            </span>
           </div>
+          <h2 className="mt-8 font-syne text-[clamp(2rem,7vw,2.625rem)] font-bold leading-tight text-white">
+            <span className="block whitespace-nowrap">Ready to transform</span>
+            <span className="block whitespace-nowrap">your brand’s visuals?</span>
+          </h2>
+          <a
+            href="mailto:sukunstudioofficial@gmail.com"
+            className="mt-6 inline-block break-all font-syne text-xl font-bold text-violet-200 transition-colors hover:text-white md:text-2xl"
+          >
+            sukunstudioofficial@gmail.com
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 gap-12 sm:grid-cols-3">
+          <div>
+            <p className="footer-heading">Explore</p>
+            <ul className="footer-links">
+              <li>
+                <a href="#services">All Services</a>
+              </li>
+              <li>
+                <a href="#portfolio">Portfolio</a>
+              </li>
+              <li>
+                <a href="#workflow">Process</a>
+              </li>
+              <li>
+                <a href="#about">Clients</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="footer-heading">Studio</p>
+            <ul className="footer-links">
+              <li>
+                <a href="#about">About Us</a>
+              </li>
+              <li>
+                <a href="#">Careers</a>
+              </li>
+              <li>
+                <a href="mailto:sukunstudioofficial@gmail.com">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <p className="footer-heading">Social</p>
+            <ul className="footer-links">
+              {['Instagram', 'Twitter', 'LinkedIn', 'Behance'].map((social) => (
+                <li key={social}>
+                  <a href="#">{social}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-12 flex max-w-7xl flex-col justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/35 md:flex-row">
+        <p>© 2024 Sukun Studio. All rights reserved.</p>
+        <div className="flex gap-8">
+          <a href="#" className="hover:text-white">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:text-white">
+            Terms of Service
+          </a>
         </div>
       </div>
     </footer>
@@ -518,7 +730,7 @@ function Footer() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface text-on-surface">
       <Navbar />
       <main>
         <Hero />
@@ -526,49 +738,9 @@ export default function App() {
         <WhySukun />
         <Workflow />
         <Portfolio />
-        
-        {/* Contact CTA */}
-        <section className="py-spacing-xl bg-surface text-center px-6 mt-[50px]">
-           <motion.div
-             initial={{ opacity: 0, scale: 0.95 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             className="max-w-4xl mx-auto bg-primary rounded-3xl p-12 md:p-20 relative overflow-hidden group shadow-2xl"
-           >
-              <div className="absolute right-0 top-0 w-1/2 h-full bg-white/5 skew-x-[-15deg] translate-x-20 transition-transform group-hover:translate-x-10 duration-700" />
-              <div className="relative z-10 text-center">
-                <h2 className="font-syne text-3xl md:text-5xl font-bold text-white mb-8">Let's create something extraordinary together.</h2>
-                
-                <div className="flex flex-col items-center gap-4 mb-10">
-                  <div className="flex items-center gap-3 text-white/90">
-                    <span className="font-syne font-bold">Email:</span>
-                    <a href="mailto:sukunstudioofficial@gmail.com" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-4">sukunstudioofficial@gmail.com</a>
-                  </div>
-                  <div className="flex items-center gap-3 text-white/90">
-                    <span className="font-syne font-bold">Location:</span>
-                    <a href="https://maps.app.goo.gl/Eb2ufnC7PZnr694N8" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-4">House 1217, Road 10 Avenue 10, Dhaka 1216</a>
-                  </div>
-                  <div className="flex items-center gap-3 text-white/90">
-                    <span className="font-syne font-bold">WhatsApp:</span>
-                    <a href="https://wa.me/8801706575704" target="_blank" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-4">+880 1706-575704</a>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap justify-center gap-4">
-                  <a href="mailto:hello@sukunstudio.com" className="bg-white text-primary px-10 py-4 rounded-lg font-poppins font-bold text-base hover:bg-white/90 transition-all flex items-center gap-2">
-                    Send Email
-                    <ChevronRight className="w-5 h-5" />
-                  </a>
-                  <a href="https://wa.me/8801705527357" target="_blank" className="bg-black/20 border border-white/20 text-white px-10 py-4 rounded-lg font-poppins font-bold text-base hover:bg-black/30 transition-all backdrop-blur-sm">
-                    WhatsApp Us
-                  </a>
-                </div>
-              </div>
-           </motion.div>
-        </section>
+        <ContactCTA />
       </main>
       <Footer />
     </div>
   );
 }
-
