@@ -189,6 +189,25 @@ const PORTFOLIO_VIDEOS = [
 
 const NAV_LINKS = ['Services', 'Workflow', 'Portfolio', 'About'];
 
+const HERO_STATS = [
+  {value: '100+', label: 'Projects delivered'},
+  {value: '6+', label: 'Creative service lanes'},
+  {value: '4K', label: 'Production-ready output'},
+];
+
+const HERO_SHOWREELS = [
+  {
+    id: 'vwrsKY1SQaY',
+    label: 'Official Showreel',
+    title: 'Sukun Studio Showreel',
+  },
+  {
+    id: 'mrg1vDYkOCI',
+    label: 'Creative Showcase',
+    title: 'Creative Showcase I',
+  },
+];
+
 function CalButton({
   children,
   className = '',
@@ -304,33 +323,107 @@ function SectionTitle({
 }
 
 function Hero() {
+  const [activeHeroVideoId, setActiveHeroVideoId] = useState(HERO_SHOWREELS[0].id);
+
   const scrollToServices = () => {
     document.getElementById('services')?.scrollIntoView({behavior: 'smooth'});
   };
 
   return (
-    <section className="hero-grid relative overflow-hidden px-4 pb-20 pt-28 md:pb-28 md:pt-32">
+    <section className="hero-grid relative overflow-hidden px-4 pb-14 pt-24 md:pb-24 md:pt-32">
       <div className="spotlight spotlight-left" />
       <div className="spotlight spotlight-right" />
-      <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+      <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-6 md:gap-12 lg:grid-cols-[1fr_1fr] xl:gap-16">
+        <motion.div
+          initial={{opacity: 0, scale: 0.94, rotate: -2}}
+          animate={{opacity: 1, scale: 1, rotate: 0}}
+          transition={{duration: 0.8}}
+          className="hero-showcase relative z-10 order-2 lg:order-1"
+        >
+          <div className="hero-status-pill hero-status-pill-top">
+            <span />
+            Campaign ready
+          </div>
+
+          {HERO_SHOWREELS.map((video) => {
+            const isActive = video.id === activeHeroVideoId;
+
+            return (
+              <div
+                key={video.id}
+                role={isActive ? undefined : 'button'}
+                tabIndex={isActive ? undefined : 0}
+                aria-label={isActive ? undefined : `Bring ${video.title} to front`}
+                onClick={isActive ? undefined : () => setActiveHeroVideoId(video.id)}
+                onKeyDown={(event) => {
+                  if (!isActive && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    setActiveHeroVideoId(video.id);
+                  }
+                }}
+                className={`hero-media ${isActive ? 'hero-media-active' : 'hero-media-back'}`}
+              >
+                <div className="hero-media-header">
+                  <span>{video.label}</span>
+                  <PlayCircle className="h-4 w-4 text-violet-200" />
+                </div>
+                <div className="hero-video-frame">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${video.id}?autoplay=0&rel=0`}
+                    title={video.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className={`h-full w-full ${isActive ? '' : 'pointer-events-none'}`}
+                  />
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="hero-status-card hero-status-card-left">
+            <span className="text-violet-300">01</span>
+            Scripted for clarity
+          </div>
+          <div className="hero-status-card hero-status-card-right">
+            <span className="text-amber-300">02</span>
+            Edited for retention
+          </div>
+          <div className="hero-status-pill hero-status-pill-bottom">
+            <span />
+            Showreel live
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{opacity: 0, y: 24}}
           animate={{opacity: 1, y: 0}}
-          transition={{duration: 0.7}}
-          className="relative z-10"
+          transition={{delay: 0.08, duration: 0.7}}
+          className="relative z-10 order-1 lg:order-2"
         >
           <span className="eyebrow">Production • Post • Animation</span>
-          <h1 className="mt-5 max-w-4xl font-syne text-[clamp(2.85rem,6vw,5.7rem)] font-bold leading-[0.95] text-white">
-            Cinematic Content for{' '}
-            <span className="text-violet-200">Tech, SaaS,</span> and Digital
-            Creators.
+          <h1 className="mt-6 max-w-[760px] font-space-grotesk text-[clamp(2.85rem,5.7vw,5.35rem)] font-bold leading-[0.94] text-white">
+            <span className="block">Premium Video</span>
+            <span className="block"><span className="text-violet-200">Production</span> for Modern</span>
+            <span className="block">Digital Brands</span>
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-8 text-secondary md:text-lg">
             Sukun Studio is a full-service creative production studio
-            transforming ideas into professional visual experiences.
+            transforming ideas into <strong className="font-bold text-white">professional video campaigns, cinematic edits, motion graphics,</strong> and brand-ready visual systems.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="hero-stats mt-7 grid gap-5 border-y border-white/14 py-4 sm:grid-cols-3">
+            {HERO_STATS.map((stat) => (
+              <div key={stat.label}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button onClick={scrollToServices} className="button-primary h-[52px] px-7">
               Explore Our Services
               <ArrowRight className="h-4 w-4" />
@@ -340,34 +433,11 @@ function Hero() {
             </CalButton>
           </div>
         </motion.div>
-
-        <motion.div
-          initial={{opacity: 0, scale: 0.94}}
-          animate={{opacity: 1, scale: 1}}
-          transition={{delay: 0.15, duration: 0.8}}
-          className="hero-media"
-        >
-          <div className="hero-media-header">
-            <span>Official Showreel</span>
-            <PlayCircle className="h-4 w-4 text-violet-200" />
-          </div>
-          <div className="hero-video-frame">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/vwrsKY1SQaY?autoplay=0&rel=0"
-              title="Sukun Studio Showreel"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="h-full w-full"
-            />
-          </div>
-          <div className="hero-stat-panel">
-            <span>100+</span>
-            <p>Projects successfully delivered for global tech brands.</p>
-          </div>
-        </motion.div>
+      </div>
+      <div className="hero-ticker">
+        {['Product videos', 'SaaS explainers', 'Short-form ads', 'Motion graphics', 'Podcast production', 'Brand films'].map((item) => (
+          <span key={item}>{item}</span>
+        ))}
       </div>
     </section>
   );
