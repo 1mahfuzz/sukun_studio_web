@@ -698,7 +698,7 @@ function ContactCTA() {
             <ChevronRight className="h-5 w-5" />
           </a>
           <a
-            href="https://wa.me/8801705527357"
+            href="https://wa.me/8801706575704"
             target="_blank"
             rel="noopener noreferrer"
             className="button-secondary h-[52px] px-7"
